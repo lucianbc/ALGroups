@@ -14,12 +14,12 @@ namespace ALGroups
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
                         "~/Scripts/moment.js",
-                        "~/Scripts/scripts/validations.js"));
+                        "~/Frontend/scripts/validations.js"));
             bundles.Add(new ScriptBundle("~/bundles/calendar").Include(
                         "~/Scripts/moment.js",
                         "~/Scripts/fullcalendar.js",
                         "~/Scripts/qTip/jquery.qtip.js",
-                        "~/Scripts/scripts/mycalendar.js"));
+                        "~/Frontend/scripts/mycalendar.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -31,11 +31,11 @@ namespace ALGroups
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/style/Site.css"));
+                      "~/Frontend/style/Site.css"));
             bundles.Add(new StyleBundle("~/Content/groupcss").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/style/Site.css",
-                      "~/Content/style/navbar-fixed-left.css",
+                      "~/Frontend/style/Site.css",
+                      "~/Frontend/style/navbar-fixed-left.css",
                       //"~/Content/fullcalendar.print.css",
                       "~/Content/fullcalendar.css",
                       "~/Scripts/qTip/jquery.qtip.css"
