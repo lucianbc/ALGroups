@@ -1,0 +1,40 @@
+﻿@model ALGroups.ViewModels.GroupDetails
+
+@{
+    ViewBag.Title = "Group Details";
+}
+
+<div>
+    <h4>GroupDetails</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+
+    @if (Request.IsAuthenticated && Model.CanJoin)
+    {
+        using (Html.BeginForm("Ask", "Membership", new { groupId = ViewContext.RouteData.Values["id"] }))
+        {
+            <input type="submit" class="btn btn-outline-primary" value="Join" />
+        }
+    }
+    else if (Request.IsAuthenticated)
+    {
+        <p> You have already requested membership for this group!</p>
+    }
+</div>

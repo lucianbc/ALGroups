@@ -1,0 +1,58 @@
+﻿@model ALGroups.ViewModels.MembersView
+@{
+    ViewBag.Title = "Members";
+    Layout = "~/Views/Shared/_GroupLayout.cshtml";
+    ViewBag.GroupName = Model.GroupName;
+    ViewBag.IsModerator = Model.CanAlter;
+}
+
+<h4>Group members:</h4>
+<p>Here are the members in the group</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>UserName</th>
+        <th>Role in the group</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model.Mebmers)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                @if (item.IsModerator)
+                {
+                    <span>Moderator</span>
+                }
+                else
+                {
+                    <span>Regular user</span>
+                }
+            </td>
+            <td>
+                @if (Model.CanAlter)
+                {
+                    if (!item.IsModerator)
+                    {
+                        using (Html.BeginForm("MakeModerator", "Membership", FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.Hidden("groupId", ViewContext.RouteData.Values["id"]);
+                            @Html.Hidden("membershipId", item.Id)
+                            <input type="submit" value="Make Moderator" class="btn btn-outline-success d-inline" />
+                        }
+                    }
+                    using (Html.BeginForm("Kick", "Membership", FormMethod.Post, new { @class = "d-inline" }))
+                    {
+                        @Html.Hidden("groupId", ViewContext.RouteData.Values["id"]);
+                        @Html.Hidden("membershipId", item.Id)
+                        <input type="submit" value="Kick" class="btn btn-outline-danger d-inline" />
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>

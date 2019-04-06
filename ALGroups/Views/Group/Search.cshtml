@@ -1,0 +1,15 @@
+﻿@model ICollection<ALGroups.ViewModels.GroupCard>
+@{
+    ViewBag.Title = "Group Search";
+}
+
+<div class="row d-flex justify-content-between">
+    <h2>Search Result</h2>
+    @Html.Partial("_SearchBar")
+</div>
+<div class="row">
+    @foreach (var x in Model)
+    {
+        @Html.Partial("_GroupCard", @x)
+    }
+</div>

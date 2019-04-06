@@ -17,8 +17,47 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
+/*
 input,
 select,
 textarea {
     max-width: 280px;
+}
+*/
+
+.al-dark {
+    background-color: #2e3458;
+}
+
+.al-accent {
+    background-color: #f1547f;
+}
+
+.al-background-dark {
+    background-color: #f6f7fc;
+}
+
+.al-menu-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px 0 0 25px;
+}
+
+.al-btn-outline-accent {
+    color: #2e3458;
+    border-color: #f1547f;
+}
+
+.al-text-accent {
+    color: #f1547f;
+}
+
+.border-1 {
+    border-width: 1px !important;
+    border-style: solid;
+}
+
+.rounded-xlg {
+    border-radius: 0.5rem !important;
 }

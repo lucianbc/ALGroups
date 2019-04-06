@@ -1,0 +1,10 @@
+﻿@model ALGroups.ViewModels.BasicView
+@{
+    ViewBag.Title = "Info";
+    Layout = "~/Views/Shared/_GroupLayout.cshtml";
+    ViewBag.GroupName = Model.GroupName;
+    ViewBag.IsModerator = Model.IsModerator;
+}
+
+<h2>Info</h2>
+<p>@Model</p>

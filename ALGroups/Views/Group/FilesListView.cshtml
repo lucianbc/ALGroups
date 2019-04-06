@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ALGroups.Models.File>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FileName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationTimespamp)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FileName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationTimespamp)
+        </td>
+        <td>
+            @Html.ActionLink("Download", "FileDownload", new { fileId = item.Id, id = ViewContext.RouteData.Values["id"] }, new { target = "_blank" })
+        </td>
+    </tr>
+}
+
+</table>

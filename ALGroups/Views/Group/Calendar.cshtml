@@ -1,0 +1,19 @@
+﻿@model ALGroups.ViewModels.BasicView
+@section Scripts
+{
+    @Scripts.Render("~/bundles/calendar")
+}
+
+@{
+    ViewBag.Title = "Calendar";
+    Layout = "~/Views/Shared/_GroupLayout.cshtml";
+    ViewBag.GroupName = Model.GroupName;
+    ViewBag.IsModerator = Model.IsModerator;
+}
+
+
+@Html.ActionLink("Add new event", "Create", "Activity", new { groupId = ViewContext.RouteData.Values["id"] }, null)
+
+<div class="row">
+    <div id="calendar"></div>
+</div>

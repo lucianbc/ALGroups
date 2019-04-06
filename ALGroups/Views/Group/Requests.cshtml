@@ -1,0 +1,44 @@
+﻿@model ALGroups.ViewModels.RequestsView
+@{
+    ViewBag.Title = "Requests";
+    Layout = "~/Views/Shared/_GroupLayout.cshtml";
+    ViewBag.GroupName = Model.GroupName;
+    ViewBag.IsModerator = Model.CanAlter;
+}
+
+<h4>Membership Requests:</h4>
+<p>Those are the users that requested membership to your group: </p>
+
+<table class="table table-striped">
+    <tr>
+        <th>Username</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model.Requests)
+    {
+        <tr>
+            <td>@item.User.UserName</td>
+            <td>
+                @if (Model.CanAlter)
+                {
+                    using (Html.BeginForm("ManageRequest", "Membership", FormMethod.Post, new { @class = "d-inline" }))
+                    {
+                        @Html.Hidden("groupId", ViewContext.RouteData.Values["id"]);
+                        @Html.Hidden("accept", true);
+                        @Html.Hidden("requestId", item.Id)
+                        <input type="submit" value="Accept" class="btn btn-outline-success d-inline" />
+                    }
+                    using (Html.BeginForm("ManageRequest", "Membership", FormMethod.Post, new { @class = "d-inline" }))
+                    {
+                        @Html.Hidden("groupId", ViewContext.RouteData.Values["id"]);
+                        @Html.Hidden("accept", false);
+                        @Html.Hidden("requestId", item.Id)
+                        <input type="submit" value="Revoke" class="btn btn-outline-danger d-inline" />
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>

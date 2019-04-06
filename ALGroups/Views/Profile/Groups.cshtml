@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ALGroups.Models.Group>
+
+@{
+    ViewBag.Title = "My Groups";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+@Html.ActionLink("Create Group", "Create", "Group", null, new { @class = "btn al-btn-outline-accent mb-2" })
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationTimestamp)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </td>
+            <td>
+                @Html.ActionLink("View", "Messages", "Group", new { id = item.Id }, null) 
+            </td>
+        </tr>
+    }
+
+</table>

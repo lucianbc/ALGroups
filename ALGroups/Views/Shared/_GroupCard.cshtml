@@ -1,0 +1,27 @@
+﻿@model ALGroups.ViewModels.GroupCard
+
+@{
+    List<string> colors = new List<string> { "#b14997", "#87a0f4", "#f38838" };
+    Random rnd = new Random();
+    string catCol = colors[rnd.Next(0, colors.Count)];
+}
+
+<div class="col-md-4 pb-3">
+    <div class="card p-3 h-100 d-flex" style="border: 3px solid @catCol; border-radius: 8px;">
+        <h5 class="card-title">@Model.Name</h5>
+        @{
+            if (Model.Categories.Count != 0)
+            {
+                <div class="small" title="@(String.Join(", ", Model.Categories.ToArray()))">
+                    <span class="rounded-pill pr-2 pl-2" style="background-color: @catCol; color: white">@Model.Categories[0]</span>
+                    @if (Model.Categories.Count != 1)
+                    {
+                        <span>and @(Model.Categories.Count-1) more</span>
+                    }
+                </div>
+            }
+        }
+        <p class="card-text flex-grow-1">@Model.Description</p>
+        @Html.ActionLink("Details", "Details", "Group", routeValues: new { id = Model.Id }, htmlAttributes: new { @class = "btn mb-0 al-accent text-white b-0"})
+    </div>
+</div>

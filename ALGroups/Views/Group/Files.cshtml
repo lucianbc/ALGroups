@@ -1,0 +1,26 @@
+﻿@model ALGroups.ViewModels.FilesViewModel
+
+@{
+    ViewBag.Title = "Files";
+    Layout = "~/Views/Shared/_GroupLayout.cshtml";
+    ViewBag.GroupName = Model.GroupName;
+    ViewBag.IsModerator = Model.RequesterIsAdmin;
+}
+
+<h4>Upload your file: </h4>
+
+@using (Html.BeginForm("FileUpload", "Group", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Hidden("id", ViewContext.RouteData.Values["id"]);
+<div class="d-flex flex-row justify-content-between">
+    <input type="file" name="uploadedFile" required />
+    <input type="submit" class="btn al-btn-outline-accent d-inline-block" name="Submit" value="Upload" />
+</div>
+    
+}
+
+<hr />
+
+<h4>Recent Uploads: </h4>
+
+@Html.Partial("FilesListView", Model.Files)
