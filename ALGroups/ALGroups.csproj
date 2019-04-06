@@ -233,10 +233,10 @@
     <Content Include="Content\fullcalendar.min.css" />
     <Content Include="Content\fullcalendar.print.css" />
     <Content Include="Content\fullcalendar.print.min.css" />
-    <Content Include="Content\navbar-fixed-left.css" />
+    <Content Include="Content\style\navbar-fixed-left.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\style\Site.css" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -382,8 +382,8 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Scripts\user\mycalendar.js" />
-    <Content Include="Scripts\user\validations.js" />
+    <Content Include="Scripts\scripts\mycalendar.js" />
+    <Content Include="Scripts\scripts\validations.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
