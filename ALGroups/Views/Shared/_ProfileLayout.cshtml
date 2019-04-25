@@ -30,6 +30,18 @@
                 <li class="@linkStyle("Groups")">
                     @Html.ActionLink("Groups", "Groups", "Profile", null, new { @class = "text-light" })
                 </li>
+                @if (User.IsInRole(Startup.ADMIN_ROLE))
+                {
+                    <li class="@linkStyle("Categories")">
+                        @Html.ActionLink("Categories", "Categories", "Admin", null, new { @class = "text-light" })
+                    </li>
+                }
+                @if (User.IsInRole(Startup.ADMIN_ROLE))
+                {
+                    <li class="@linkStyle("Users")">
+                        @Html.ActionLink("All users", "Users", "Admin", null, new { @class = "text-light" })
+                    </li>
+                }
             </ul>
             <div class="d-md-none">
                 @Html.Partial("_LoginPartial");

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<ALGroups.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<h2>Users</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @if (!(item.LockoutEndDateUtc == null || item.LockoutEndDateUtc < DateTime.Now))
+            {
+                @Html.DisplayFor(modelItem => item.LockoutEndDateUtc);
+            }
+        </td>
+        <td>
+            @if ((item.LockoutEndDateUtc == null ||  item.LockoutEndDateUtc < DateTime.Now) && item.UserName != User.Identity.Name)
+            {
+                using (Html.BeginForm("BlockUser", "Admin", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("userId", item.Id);
+                    <button class="btn btn-sm btn-danger">Block for 30 days</button>
+                }
+            }
+            else if (item.UserName != User.Identity.Name)
+            {
+                using (Html.BeginForm("UnblockUser", "Admin", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("userId", item.Id);
+                    <button class="btn btn-sm btn-success">Unblock</button>
+                }
+            }
+        </td>
+    </tr>
+}
+
+</table>

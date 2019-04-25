@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ALGroups.Models.Category>
+
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<h2>Categories</h2>
+
+@using(Html.BeginForm("Categories", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="d-flex flex-row">
+        <input class="form-control mr-2" type="text" name="categoryName" placeholder="Category Name"/>
+        <button type="submit" class="btn btn-sm btn-outline-success">Create</button>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+    </tr>
+}
+
+</table>

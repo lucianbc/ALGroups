@@ -25,5 +25,6 @@ namespace ALGroups.Models
         public DbSet<File> Files { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<MembershipRequest> Requests { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

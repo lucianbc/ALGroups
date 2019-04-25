@@ -198,6 +198,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -446,6 +447,8 @@
     <Content Include="Views\Group\FilesListView.cshtml" />
     <Content Include="Views\Activity\Create.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\Categories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
