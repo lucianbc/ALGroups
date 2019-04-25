@@ -21,7 +21,7 @@ namespace ALGroups.Controllers
         [HttpPost]
         public ActionResult Kick(int groupId, int membershipId)
         {
-            KickUser action = new KickUser(_db, groupId, RequesterId(), membershipId);
+            KickUser action = new KickUser(_db, groupId, Requester(), membershipId);
             action.Execute();
             return RedirectToAction("Members", "Group", new { id = groupId });
         }
@@ -30,7 +30,7 @@ namespace ALGroups.Controllers
         [HttpPost]
         public ActionResult MakeModerator(int groupId, int membershipId)
         {
-            MakeModerator action = new MakeModerator(_db, groupId, RequesterId(), membershipId);
+            MakeModerator action = new MakeModerator(_db, groupId, Requester(), membershipId);
             action.Execute();
             return RedirectToAction("Members", "Group", new { id = groupId });
         }
@@ -39,7 +39,7 @@ namespace ALGroups.Controllers
         [HttpPost]
         public ActionResult ManageRequest(int groupId, int requestId, bool accept)
         {
-            ManageRequest action = new ManageRequest(_db, groupId, RequesterId(), requestId, accept);
+            ManageRequest action = new ManageRequest(_db, groupId, Requester(), requestId, accept);
             action.Execute();
             return RedirectToAction("Requests", "Group", new { id = groupId });
         }

@@ -48,7 +48,7 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/Messages")]
         public ActionResult Messages(int id)
         {
-            GetMessages search = new GetMessages(_db, id, RequesterId());
+            GetMessages search = new GetMessages(_db, id, Requester());
             return View(model: search.Execute());
         }
 
@@ -56,7 +56,7 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/Files")]
         public ActionResult Files(int id)
         {
-            GetFiles search = new GetFiles(_db, id, RequesterId());
+            GetFiles search = new GetFiles(_db, id, Requester());
             return View(model: search.Execute());
         }
 
@@ -64,7 +64,7 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/Members")]
         public ActionResult Members(int id)
         {
-            GetMembers action = new GetMembers(_db, id, RequesterId());
+            GetMembers action = new GetMembers(_db, id, Requester());
             return View(action.Execute());
         }
 
@@ -72,7 +72,7 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/Requests")]
         public ActionResult Requests(int id)
         {
-            GetRequests action = new GetRequests(_db, id, RequesterId());
+            GetRequests action = new GetRequests(_db, id, Requester());
             return View(action.Execute());
         }
 
@@ -80,21 +80,21 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/Calendar")]
         public ActionResult Calendar(int id)
         {
-            return View((new GetPageData(_db, id, RequesterId())).Execute());
+            return View((new GetPageData(_db, id, Requester())).Execute());
         }
 
         [Authorize]
         [Route("Group/{id}/Info")]
         public ActionResult Info(int id)
         {
-            return View((new GetPageData(_db, id, RequesterId())).Execute());
+            return View((new GetPageData(_db, id, Requester())).Execute());
         }
 
         [Authorize]
         [HttpPost]
         public ActionResult Message(int id, PostMessageForm message)
         {
-            PostMessage action = new PostMessage(_db, id, RequesterId(), message);
+            PostMessage action = new PostMessage(_db, id, Requester(), message);
             action.Execute();
             return RedirectToAction("Messages", new { id });
         }
@@ -105,7 +105,7 @@ namespace ALGroups.Controllers
         {
             if (Request.Files.Count > 0)
             {
-                PostFile action = new PostFile(_db, id, RequesterId(), uploadedFile, Server.MapPath("~/Files/"));
+                PostFile action = new PostFile(_db, id, Requester(), uploadedFile, Server.MapPath("~/Files/"));
                 action.Execute();
             }
             return RedirectToAction("Files", new { id });
@@ -115,14 +115,34 @@ namespace ALGroups.Controllers
         [Route("Group/{id}/FileDownload/{fileId}")]
         public ActionResult FileDownload(int id, int fileId)
         {
-            RetrieveFile action = new RetrieveFile(_db, id, RequesterId(), fileId);
+            RetrieveFile action = new RetrieveFile(_db, id, Requester(), fileId);
             var result = action.Execute();
             return File(result.Item2, result.Item1.ContentType, result.Item1.FileName);
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMessage(int messageId, int groupId)
+        {
+            var action = new DeleteMessage(_db, groupId, Requester(), messageId);
+            action.Execute();
+            return RedirectToAction("Messages", new { id = groupId });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteFile(int fileId, int groupId)
+        {
+            var action = new DeleteFile(_db, groupId, Requester(), fileId);
+            action.Execute();
+            return RedirectToAction("Files", new { id = groupId });
+        }
+
         private bool RequesterInGroup(int id, ApplicationUser requester)
         {
-            return requester != null && _db.Memberships.Any(m => m.Group.Id == id && m.User.Id == requester.Id);
+            return requester != null && (User.IsInRole(Startup.ADMIN_ROLE) || _db.Memberships.Any(m => m.Group.Id == id && m.User.Id == requester.Id));
         }
     }
 }

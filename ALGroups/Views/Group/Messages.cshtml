@@ -16,8 +16,17 @@
 @foreach (var item in Model.Messages)
 {
     <div class="rounded-xlg border-secondary border-1 p-2 mb-3">
-        <i>@item.Creator.UserName on @item.CreationTimespamp: </i>
-        <br />
+        <div class="d-flex flex-row justify-content-between">
+            <i>@item.Creator.UserName on @item.CreationTimespamp: </i>
+            @if (Model.RequesterIsAdmin)
+            {
+                using (Html.BeginForm("DeleteMessage", "Group", new { groupId = ViewContext.RouteData.Values["id"], messageId = item.Id }, FormMethod.Post, null))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete" />
+                }
+            }
+        </div>
         <b>@item.Title</b>
         <p>@item.Content</p>
     </div>

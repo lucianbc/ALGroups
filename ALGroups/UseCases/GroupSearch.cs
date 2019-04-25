@@ -26,11 +26,26 @@ namespace ALGroups.GroupSearch
 
         public List<Group> Execute()
         {
-            var groups =
+            var groups = IsAdmin(requester) ? AdminGroups() : UserGroups();
+                
+            return groups.ToList();
+        }
+
+        private IQueryable<Group> AdminGroups()
+        {
+            return (
+                from g in _db.Groups
+                select g
+                );
+        }
+
+        private IQueryable<Group> UserGroups()
+        {
+            return (
                 from m in _db.Memberships
                 where m.User.Id == requester.Id
-                select m.Group;
-            return groups.ToList();
+                select m.Group
+                );
         }
     }
 

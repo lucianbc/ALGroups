@@ -21,6 +21,14 @@
         </td>
         <td>
             @Html.ActionLink("Download", "FileDownload", new { fileId = item.Id, id = ViewContext.RouteData.Values["id"] }, new { target = "_blank" })
+            @if (ViewBag.IsModerator)
+            {
+                using (Html.BeginForm("DeleteFile", "Group", new { groupId = ViewContext.RouteData.Values["id"], fileId = item.Id }, FormMethod.Post, null))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete" />
+                }
+            }
         </td>
     </tr>
 }

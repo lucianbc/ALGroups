@@ -13,7 +13,7 @@ namespace ALGroups.Controllers
         [Authorize]
         public ActionResult List(int groupId)
         {
-            ListActivities action = new ListActivities(_db, groupId, RequesterId());
+            ListActivities action = new ListActivities(_db, groupId, Requester());
             return Json(action.Execute(), JsonRequestBehavior.AllowGet);
         }
 
@@ -30,7 +30,7 @@ namespace ALGroups.Controllers
         {
             if (ModelState.IsValid)
             {
-                CreateActivity action = new CreateActivity(_db, groupId, RequesterId(), activity);
+                CreateActivity action = new CreateActivity(_db, groupId, Requester(), activity);
                 action.Execute();
                 return RedirectToAction("Calendar", "Group", new { id = groupId });
             }

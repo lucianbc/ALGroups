@@ -11,6 +11,10 @@ namespace ALGroups
 {
     public partial class Startup
     {
+        public const string ADMIN_EMAIL = "admin@algroups.net";
+        public const string ADMIN_PASSWORD = "Admin123@";
+        public const string ADMIN_ROLE = "ADMIN";
+
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {

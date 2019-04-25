@@ -9,7 +9,7 @@ namespace ALGroups.UseCases
 {
     public class GetMessages : GroupMemberUseCase
     {
-        public GetMessages(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        public GetMessages(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         { }
         
         public MessagesViewModel Execute()
@@ -30,7 +30,7 @@ namespace ALGroups.UseCases
 
     public class GetFiles : GroupMemberUseCase
     {
-        public GetFiles(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        public GetFiles(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         { }
 
         public FilesViewModel Execute()
@@ -48,11 +48,53 @@ namespace ALGroups.UseCases
         }
     }
 
+    public class DeleteMessage : ModeratorUseCase
+    {
+        readonly int messageId;
+        public DeleteMessage(ApplicationDbContext db, int groupId, ApplicationUser requester, int messageId) : base(db, groupId, requester)
+        {
+            this.messageId = messageId;
+        }
+
+        public void Execute()
+        {
+            Message m = new Message
+            {
+                Id = messageId
+            };
+            _db.Messages.Attach(m);
+            _db.Messages.Remove(m);
+            _db.SaveChanges();
+        }
+    }
+
+    public class DeleteFile : ModeratorUseCase
+    {
+        readonly int fileId;
+        public DeleteFile(ApplicationDbContext db, int groupId, ApplicationUser requester, int fileId) : base(db, groupId, requester)
+        {
+            this.fileId = fileId;
+        }
+
+        public void Execute()
+        {
+            File f = _db.Files.Find(fileId);
+            if (f == null)
+            {
+                throw new HttpException(404, "File not found");
+            }
+            if (System.IO.File.Exists(f.FilePath))
+                System.IO.File.Delete(f.FilePath);
+            _db.Files.Remove(f);
+            _db.SaveChanges();
+        }
+    }
+
     public class PostFile : GroupMemberUseCase
     {
         HttpPostedFileBase file;
         readonly string basePath;
-        public PostFile(ApplicationDbContext db, int groupId, string userId, HttpPostedFileBase file, string basePath) : base(db, groupId, userId)
+        public PostFile(ApplicationDbContext db, int groupId, ApplicationUser requester, HttpPostedFileBase file, string basePath) : base(db, groupId, requester)
         {
             this.file = file;
             this.basePath = basePath;
@@ -81,7 +123,7 @@ namespace ALGroups.UseCases
     {
         private int fileId;
 
-        public RetrieveFile(ApplicationDbContext db, int groupId, string userId, int fileId) : base(db, groupId, userId)
+        public RetrieveFile(ApplicationDbContext db, int groupId, ApplicationUser requester, int fileId) : base(db, groupId, requester)
         {
             this.fileId = fileId;
         }
@@ -103,7 +145,7 @@ namespace ALGroups.UseCases
     {
         private readonly PostMessageForm message;
 
-        public PostMessage(ApplicationDbContext db, int groupId, string userId, PostMessageForm message) : base(db, groupId, userId)
+        public PostMessage(ApplicationDbContext db, int groupId, ApplicationUser requester, PostMessageForm message) : base(db, groupId, requester)
         {
             this.message = message;
         }
@@ -126,7 +168,7 @@ namespace ALGroups.UseCases
     public class CreateActivity : GroupMemberUseCase
     {
         private readonly Activity a;
-        public CreateActivity(ApplicationDbContext db, int groupId, string userId, Activity a) : base(db, groupId, userId)
+        public CreateActivity(ApplicationDbContext db, int groupId, ApplicationUser requester, Activity a) : base(db, groupId, requester)
         {
             this.a = a;
         }
@@ -143,7 +185,7 @@ namespace ALGroups.UseCases
 
     public class ListActivities : GroupMemberUseCase
     {
-        public ListActivities(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        public ListActivities(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         {
         }
         
@@ -158,7 +200,7 @@ namespace ALGroups.UseCases
 
     public class GetPageData : GroupMemberUseCase
     {
-        public GetPageData(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        public GetPageData(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         {
         }
 
@@ -174,16 +216,17 @@ namespace ALGroups.UseCases
 
     public class GetMembers : GroupMemberUseCase
     {
-        private readonly string userId;
-        public GetMembers(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        private ApplicationUser requester;
+
+        public GetMembers(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         {
-            this.userId = userId;
+            this.requester = requester;
         }
 
         public MembersView Execute()
         {
             var members = (from m in _db.Memberships
-                           where m.Group.Id == _membership.Group.Id && m.User.Id != userId
+                           where m.Group.Id == _membership.Group.Id && m.User.Id != requester.Id
                            select m).ToList();
             return new MembersView
             {
@@ -196,7 +239,7 @@ namespace ALGroups.UseCases
 
     public class GetRequests : ModeratorUseCase
     {
-        public GetRequests(ApplicationDbContext db, int groupId, string userId) : base(db, groupId, userId)
+        public GetRequests(ApplicationDbContext db, int groupId, ApplicationUser requester) : base(db, groupId, requester)
         { }
 
         public RequestsView Execute()
@@ -217,7 +260,7 @@ namespace ALGroups.UseCases
     {
         private readonly int membershipId;
 
-        public MakeModerator(ApplicationDbContext db, int groupId, string userId, int membershipId) : base(db, groupId, userId)
+        public MakeModerator(ApplicationDbContext db, int groupId, ApplicationUser requester, int membershipId) : base(db, groupId, requester)
         {
             this.membershipId = membershipId;
         }
@@ -235,7 +278,7 @@ namespace ALGroups.UseCases
     {
         private readonly int membershipId;
 
-        public KickUser(ApplicationDbContext db, int groupId, string userId, int membershipId) : base(db, groupId, userId)
+        public KickUser(ApplicationDbContext db, int groupId, ApplicationUser requester, int membershipId) : base(db, groupId, requester)
         {
             this.membershipId = membershipId;
         }
@@ -257,7 +300,7 @@ namespace ALGroups.UseCases
         private readonly int requestId;
         private readonly bool accept;
 
-        public ManageRequest(ApplicationDbContext db, int groupId, string userId, int requestId, bool accept) : base(db, groupId, userId)
+        public ManageRequest(ApplicationDbContext db, int groupId, ApplicationUser requester, int requestId, bool accept) : base(db, groupId, requester)
         {
             this.requestId = requestId;
             this.accept = accept;
