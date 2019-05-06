@@ -35,13 +35,24 @@ namespace ALGroups.Controllers
         {
             CreateGroup createGroup = new CreateGroup(_db, Requester(), form);
             var g = createGroup.Execute();
-            return RedirectToAction("Messages", new { id = g.Id });
+            return RedirectToAction("Messages", new { g.Id });
         }
         
         [Authorize]
         public ActionResult Create()
         {
-            return View();
+            var categories = _db.Categories.Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }
+            ).ToList();
+            var vm = new CreateGroupForm
+            {
+                Categories = categories
+            };
+
+            return View(vm);
         }
 
         [Authorize]

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ALGroups.ViewModels
 {
@@ -37,8 +38,7 @@ namespace ALGroups.ViewModels
             Description = group.Description.Length > DES_LEN + 3
                 ? group.Description.Substring(DES_LEN) + "..."
                 : group.Description;
-            //Categories = group.Categories.Select(c => c.Name).ToList();
-            Categories = new List<string> { "Cat1", "Cat2", "Cat3" };
+            Categories = group.Categories.Select(c => c.Name).ToList();
         }
     }
 
@@ -46,6 +46,8 @@ namespace ALGroups.ViewModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public List<SelectListItem> Categories { get; set; }
+        public int[] SelectedCategories { get; set; }
     }
 
     public class MessagesViewModel

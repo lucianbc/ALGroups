@@ -50,11 +50,15 @@ namespace ALGroups.UseCases
 
         public GroupDetails Execute()
         {
+            var categories = (from c in _db.Categories
+                              where form.SelectedCategories.Contains(c.Id)
+                              select c)
+                              .ToList();
             var group = new Group
             {
                 Name = this.form.Name,
                 Description = this.form.Description,
-                Categories = new List<Category>()
+                Categories = categories
             };
 
             _db.Groups.Add(group);
